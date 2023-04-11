@@ -4,13 +4,13 @@ CREATE TABLE IF NOT EXISTS currencies
     code VARCHAR(3) UNIQUE NOT NULL,
     full_name NVARCHAR(45) UNIQUE NOT NULL,
     sign VARCHAR(2) NOT NULL
-    );
+);
 
 CREATE INDEX IF NOT EXISTS idx_id
-    ON currencies(id);
+ON currencies(id);
 
 CREATE INDEX IF NOT EXISTS idx_code
-    ON currencies(code);
+ON currencies(code);
 
 
 CREATE TABLE IF NOT EXISTS exchange_rates
@@ -20,10 +20,10 @@ CREATE TABLE IF NOT EXISTS exchange_rates
     target_currency_id INTEGER NOT NULL REFERENCES currencies(id) ON DELETE CASCADE,
     rate DECIMAL(6) NOT NULL,
     CONSTRAINT unique_currencies UNIQUE (base_currency_id, target_currency_id)
-    );
+);
 
 CREATE INDEX IF NOT EXISTS idx_id
-    ON exchange_rates(id);
+ON exchange_rates(id);
 
 CREATE INDEX IF NOT EXISTS idx_currencies
-    ON exchange_rates(base_currency_id, target_currency_id);
+ON exchange_rates(base_currency_id, target_currency_id);
