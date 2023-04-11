@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS exchange_rates
     base_currency_id INTEGER NOT NULL REFERENCES currencies(id) ON DELETE CASCADE,
     target_currency_id INTEGER NOT NULL REFERENCES currencies(id) ON DELETE CASCADE,
     rate DECIMAL(6) NOT NULL,
-    CONSTRAINT unique_currencies UNIQUE (base_currency_id, target_currency_id)
+    CONSTRAINT unique_currencies CHECK (base_currency_id != target_currency_id)
 );
 
 CREATE INDEX IF NOT EXISTS idx_id
