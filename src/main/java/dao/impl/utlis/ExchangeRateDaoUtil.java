@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 public class ExchangeRateDaoUtil {
     public ExchangeRate getExchangeRate(ResultSet resultSet) throws SQLException {
-        ExchangeRate exchangeRate = null;
         int id = resultSet.getInt("id");
         int baseCurrencyId = resultSet.getInt("base_currency_id");
         int targetCurrencyId = resultSet.getInt("target_currency_id");
@@ -22,7 +21,6 @@ public class ExchangeRateDaoUtil {
         String targetCurrencyFullName = resultSet.getString(11);
         String targetCurrencySign = resultSet.getString(12);
 
-        exchangeRate = new ExchangeRate();
         Currency baseCurrency = new Currency();
         baseCurrency.setCode(baseCurrencyCode);
         baseCurrency.setId(baseCurrencyId);
@@ -35,6 +33,7 @@ public class ExchangeRateDaoUtil {
         targetCurrency.setFullName(targetCurrencyFullName);
         targetCurrency.setSign(targetCurrencySign);
 
+        ExchangeRate exchangeRate = new ExchangeRate();
         exchangeRate.setId(id);
         exchangeRate.setRate(rate);
         exchangeRate.setBaseCurrency(baseCurrency);

@@ -1,12 +1,15 @@
 package dao.impl;
 
 import dao.ICurrencyDao;
+import dao.impl.utlis.CurrencyDaoUtil;
 import model.Currency;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyDao implements ICurrencyDao {
+    private final CurrencyDaoUtil daoUtil = new CurrencyDaoUtil();
     @Override
     public void create(Currency user) {
 
@@ -20,16 +23,9 @@ public class CurrencyDao implements ICurrencyDao {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
-            String code = resultSet.getString("code");
-            String fullName = resultSet.getString("full_name");
-            String sign = resultSet.getString("sign");
             Currency currency = null;
             if (resultSet.next()) {
-                currency = new Currency();
-                currency.setFullName(fullName);
-                currency.setId(id);
-                currency.setSign(sign);
-                currency.setCode(code);
+                currency = daoUtil.getCurrency(resultSet);
             }
             return currency;
         } catch (SQLException e) {
@@ -39,7 +35,19 @@ public class CurrencyDao implements ICurrencyDao {
 
     @Override
     public List<Currency> readAll() {
-        return null;
+        final String query = "SELECT * FROM currencies";
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(query);
+            List<Currency> currencies = new ArrayList<>();
+            while (resultSet.next()) {
+                Currency currency = daoUtil.getCurrency(resultSet);
+                currencies.add(currency);
+            }
+            return currencies;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
