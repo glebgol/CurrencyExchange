@@ -17,4 +17,8 @@ public class TestValues {
     public static List<ExchangeRate> getExchangeRatesList() {
         return List.of(new ExchangeRate());
     }
+
+    public static ExchangeRate getExchangeRate() {
+        return new ExchangeRate();
+    }
 }
