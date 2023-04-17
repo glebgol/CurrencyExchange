@@ -1,6 +1,7 @@
 package services.impl.values;
 
 import model.Currency;
+import model.ExchangeRate;
 
 import java.util.List;
 
@@ -11,5 +12,9 @@ public class TestValues {
 
     public static Currency getCurrency() {
         return new Currency();
+    }
+
+    public static List<ExchangeRate> getExchangeRatesList() {
+        return List.of(new ExchangeRate());
     }
 }
