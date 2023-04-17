@@ -39,7 +39,7 @@ class CurrencyServiceTest {
         Currency currency = getCurrency();
         when(currencyDao.read(anyString())).thenReturn(currency);
 
-        Optional<Currency> optionalCurrency = service.getCurrencyByCode("USDBYN");
+        Optional<Currency> optionalCurrency = service.getCurrencyByCode("USD");
 
         assertEquals(currency, optionalCurrency.get());
     }
