@@ -11,8 +11,25 @@ import java.util.List;
 public class CurrencyDao implements ICurrencyDao {
     private final CurrencyDaoUtil daoUtil = new CurrencyDaoUtil();
     @Override
-    public void create(Currency user) {
+    public void create(Currency currency) {
+        final String query = """
+                INSERT INTO currencies (code, full_name, sign)
+                VALUES (?, ?, ?)
+                """;
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            String code = currency.getCode();
+            String fullName = currency.getFullName();
+            String sign = currency.getSign();
 
+            statement.setString(1, code);
+            statement.setString(2, fullName);
+            statement.setString(3, sign);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -51,12 +68,12 @@ public class CurrencyDao implements ICurrencyDao {
     }
 
     @Override
-    public void update(Currency user) {
+    public void update(Currency currency) {
 
     }
 
     @Override
-    public void delete(Currency userName) {
+    public void delete(Currency currency) {
 
     }
 }

@@ -5,9 +5,9 @@ import model.ExchangeRate;
 import java.util.List;
 
 public interface IExchangeRateDao {
-    void create(ExchangeRate user);
+    void create(ExchangeRate exchangeRate);
     ExchangeRate read(int id);
     List<ExchangeRate> readAll();
-    void update(ExchangeRate user);
-    void delete(ExchangeRate userName);
+    void update(ExchangeRate exchangeRate);
+    void delete(ExchangeRate exchangeRate);
 }

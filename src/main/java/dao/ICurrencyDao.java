@@ -5,9 +5,9 @@ import model.Currency;
 import java.util.List;
 
 public interface ICurrencyDao {
-    void create(Currency user);
+    void create(Currency currency);
     Currency read(int id);
     List<Currency> readAll();
-    void update(Currency user);
-    void delete(Currency userName);
+    void update(Currency currency);
+    void delete(Currency currency);
 }

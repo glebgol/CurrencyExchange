@@ -4,6 +4,7 @@ import dao.IExchangeRateDao;
 import dao.impl.utlis.ExchangeRateDaoUtil;
 import model.ExchangeRate;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +12,35 @@ import java.util.List;
 public class ExchangeRateDao implements IExchangeRateDao {
     private final ExchangeRateDaoUtil daoUtil = new ExchangeRateDaoUtil();
     @Override
-    public void create(ExchangeRate user) {
+    public void create(ExchangeRate exchangeRate) {
+        final String query = """
+                INSERT INTO exchange_rates (base_currency_id, target_currency_id, rate)
+                VALUES (?, ?, ?)
+                """;
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            int baseCurrencyId = exchangeRate.getBaseCurrency().getId();
+            int targetCurrencyId = exchangeRate.getTargetCurrency().getId();
+            BigDecimal rate = exchangeRate.getRate();
 
+            statement.setInt(1, baseCurrencyId);
+            statement.setInt(2, targetCurrencyId);
+            statement.setBigDecimal(3, rate);
+
+            statement.executeQuery();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public ExchangeRate read(int id) {
-        final String query = "SELECT * FROM exchange_rates e " +
-                "JOIN currencies c ON c.id = e.base_currency_id " +
-                "JOIN currencies c2 ON c2.id = e.target_currency_id " +
-                "WHERE e.id = (?)";
+        final String query = """
+                SELECT * FROM exchange_rates e
+                JOIN currencies c ON c.id = e.base_currency_id
+                JOIN currencies c2 ON c2.id = e.target_currency_id
+                WHERE e.id = (?)
+                """;
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -39,9 +59,11 @@ public class ExchangeRateDao implements IExchangeRateDao {
 
     @Override
     public List<ExchangeRate> readAll() {
-        final String query = "SELECT * FROM exchange_rates e " +
-                "JOIN currencies c ON c.id = e.base_currency_id " +
-                "JOIN currencies c2 ON c2.id = e.target_currency_id ";
+        final String query = """
+                SELECT * FROM exchange_rates e
+                JOIN currencies c ON c.id = e.base_currency_id
+                JOIN currencies c2 ON c2.id = e.target_currency_id
+                """;
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
              Statement statement = connection.createStatement()) {
 
@@ -60,12 +82,12 @@ public class ExchangeRateDao implements IExchangeRateDao {
     }
 
     @Override
-    public void update(ExchangeRate user) {
+    public void update(ExchangeRate exchangeRate) {
 
     }
 
     @Override
-    public void delete(ExchangeRate userName) {
+    public void delete(ExchangeRate exchangeRate) {
 
     }
 }
