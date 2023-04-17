@@ -58,6 +58,31 @@ public class ExchangeRateDao implements IExchangeRateDao {
     }
 
     @Override
+    public ExchangeRate read(String baseCurrencyCode, String targetCurrencyCode) {
+        final String query = """
+                SELECT * FROM exchange_rates e
+                JOIN currencies c ON c.id = e.base_currency_id
+                JOIN currencies c2 ON c2.id = e.target_currency_id
+                WHERE c.code = (?) AND c2.code = (?)
+                """;
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, baseCurrencyCode);
+            statement.setString(2, targetCurrencyCode);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            ExchangeRate exchangeRate = null;
+            if (resultSet.next()) {
+                exchangeRate = daoUtil.getExchangeRate(resultSet);
+            }
+            return exchangeRate;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<ExchangeRate> readAll() {
         final String query = """
                 SELECT * FROM exchange_rates e

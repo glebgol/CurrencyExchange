@@ -51,6 +51,24 @@ public class CurrencyDao implements ICurrencyDao {
     }
 
     @Override
+    public Currency read(String code) {
+        final String query = "SELECT * FROM currencies WHERE code = (?)";
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, code);
+            ResultSet resultSet = statement.executeQuery();
+
+            Currency currency = null;
+            if (resultSet.next()) {
+                currency = daoUtil.getCurrency(resultSet);
+            }
+            return currency;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Currency> readAll() {
         final String query = "SELECT * FROM currencies";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
