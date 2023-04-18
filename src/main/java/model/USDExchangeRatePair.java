@@ -1,11 +1,13 @@
 package model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Getter
+@NoArgsConstructor
 public class USDExchangeRatePair {
     private ExchangeRate firstExchangeRate;
     private ExchangeRate secondExchangeRate;
@@ -33,13 +35,16 @@ public class USDExchangeRatePair {
         return !exchangeRate.getBaseCurrency().getCode().equals("USD");
     }
 
-    public BigDecimal getExchangeRateFromFirstToSecond() {
+    public ExchangeRate getExchangeRateFromFirstToSecond() {
         BigDecimal firstRate = firstExchangeRate.getRate();
         BigDecimal secondRate = secondExchangeRate.getRate();
+        BigDecimal rate = getRate(firstRate, secondRate);
+        return new ExchangeRate(firstExchangeRate.getTargetCurrency(), secondExchangeRate.getTargetCurrency(), rate);
+    }
 
+    protected BigDecimal getRate(BigDecimal firstRate, BigDecimal secondRate) {
         RoundingMode roundingMode = RoundingMode.CEILING;
         int scale = 6;
-
-        return firstRate.divide(secondRate, scale, roundingMode) ;
+        return secondRate.divide(firstRate, scale, roundingMode);
     }
 }
