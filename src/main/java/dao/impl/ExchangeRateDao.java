@@ -3,6 +3,7 @@ package dao.impl;
 import dao.IExchangeRateDao;
 import dao.impl.utlis.ExchangeRateDaoUtil;
 import model.ExchangeRate;
+import model.USDExchangeRatePair;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -102,6 +103,38 @@ public class ExchangeRateDao implements IExchangeRateDao {
             }
 
             return exchangeRates;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<USDExchangeRatePair> readCodesWithUSDBase(String baseCurrencyCode, String targetCurrencyCode) {
+        final String query = """
+                SELECT * FROM exchange_rates e
+                JOIN currencies c ON c.id = e.base_currency_id
+                JOIN currencies c2 ON c2.id = e.target_currency_id
+                WHERE c.code = 'USD' AND c2.code IN (?, ?)
+                """;
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, baseCurrencyCode);
+            statement.setString(2, targetCurrencyCode);
+            ResultSet resultSet = statement.executeQuery();
+
+            ExchangeRate firstExchangeRate = null;
+            ExchangeRate secondExchangeRate = null;
+
+            while (resultSet.next()) {
+                firstExchangeRate = daoUtil.getExchangeRate(resultSet);
+                if (resultSet.next()) {
+                    secondExchangeRate = daoUtil.getExchangeRate(resultSet);
+                } else {
+                    return Optional.empty();
+                }
+            }
+            return Optional.of(new USDExchangeRatePair(firstExchangeRate, secondExchangeRate));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
