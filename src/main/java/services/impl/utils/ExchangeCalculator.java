@@ -18,7 +18,8 @@ public class ExchangeCalculator {
     }
 
     public BigDecimal convertFromUSDPair(BigDecimal amountToConvert, USDExchangeRatePair usdExchangeRatePair) {
-        return null;
+        BigDecimal rate = usdExchangeRatePair.getExchangeRateFromFirstToSecond().getRate();
+        return amountToConvert.multiply(rate);
     }
 
     private BigDecimal getReverseRate(ExchangeRate exchangeRate) {
