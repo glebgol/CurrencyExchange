@@ -7,6 +7,7 @@ import model.Currency;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CurrencyDao implements ICurrencyDao {
     private final CurrencyDaoUtil daoUtil = new CurrencyDaoUtil();
@@ -33,7 +34,7 @@ public class CurrencyDao implements ICurrencyDao {
     }
 
     @Override
-    public Currency read(int id) {
+    public Optional<Currency> read(int id) {
         final String query = "SELECT * FROM currencies WHERE id = (?)";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -44,14 +45,14 @@ public class CurrencyDao implements ICurrencyDao {
             if (resultSet.next()) {
                 currency = daoUtil.getCurrency(resultSet);
             }
-            return currency;
+            return Optional.ofNullable(currency);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Currency read(String code) {
+    public Optional<Currency> read(String code) {
         final String query = "SELECT * FROM currencies WHERE code = (?)";
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:currency_exchanger.db");
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -62,7 +63,7 @@ public class CurrencyDao implements ICurrencyDao {
             if (resultSet.next()) {
                 currency = daoUtil.getCurrency(resultSet);
             }
-            return currency;
+            return Optional.ofNullable(currency);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

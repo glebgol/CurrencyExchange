@@ -13,7 +13,6 @@ public class CurrencyService implements ICurrencyService {
         this.currencyDao = currencyDao;
     }
 
-
     @Override
     public List<Currency> getAllCurrencies() {
         return currencyDao.readAll();
@@ -21,7 +20,6 @@ public class CurrencyService implements ICurrencyService {
 
     @Override
     public Optional<Currency> getCurrencyByCode(String code) {
-        Currency currency = currencyDao.read(code);
-        return Optional.of(currency);
+        return currencyDao.read(code);
     }
 }

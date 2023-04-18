@@ -26,21 +26,21 @@ class CurrencyServiceTest {
 
     @Test
     void getAllCurrencies() {
-        List<Currency> currencyList = getCurrenciesList();
-        when(currencyDao.readAll()).thenReturn(currencyList);
+        List<Currency> expectedCurrencies = getCurrenciesList();
+        when(currencyDao.readAll()).thenReturn(expectedCurrencies);
 
-        List<Currency> currencies = service.getAllCurrencies();
+        List<Currency> actualCurrencies = service.getAllCurrencies();
 
-        assertEquals(currencyList, currencies);
+        assertEquals(expectedCurrencies, actualCurrencies);
     }
 
     @Test
     void getCurrencyByCode() {
-        Currency currency = getCurrency();
-        when(currencyDao.read(anyString())).thenReturn(currency);
+        Optional<Currency> expectedCurrency = Optional.of(getCurrency());
+        when(currencyDao.read(anyString())).thenReturn(expectedCurrency);
 
-        Optional<Currency> optionalCurrency = service.getCurrencyByCode("USD");
+        Optional<Currency> actualCurrency = service.getCurrencyByCode("USD");
 
-        assertEquals(currency, optionalCurrency.get());
+        assertEquals(expectedCurrency, actualCurrency);
     }
 }
