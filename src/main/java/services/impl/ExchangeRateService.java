@@ -1,9 +1,11 @@
 package services.impl;
 
 import dao.IExchangeRateDao;
+import dto.ExchangeRateResponse;
 import model.ExchangeRate;
 import services.IExchangeRateService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +27,12 @@ public class ExchangeRateService implements IExchangeRateService {
         String baseCurrencyCode = getBaseCurrencyCode(codes);
         String targetCurrencyCode = getTargetCurrencyCode(codes);
 
-        ExchangeRate exchangeRate = exchangeRateDao.read(baseCurrencyCode, targetCurrencyCode);
+        return exchangeRateDao.read(baseCurrencyCode, targetCurrencyCode);
+    }
 
-        return Optional.of(exchangeRate);
+    @Override
+    public ExchangeRateResponse getExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount) {
+        //Optional<ExchangeRate> exchangeRateOptional = exchangeRateDao.read(baseCurrencyCode, targetCurrencyCode);
+        return null;
     }
 }

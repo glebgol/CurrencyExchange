@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ExchangeRateDao implements IExchangeRateDao {
     private final ExchangeRateDaoUtil daoUtil = new ExchangeRateDaoUtil();
@@ -34,7 +35,7 @@ public class ExchangeRateDao implements IExchangeRateDao {
     }
 
     @Override
-    public ExchangeRate read(int id) {
+    public Optional<ExchangeRate> read(int id) {
         final String query = """
                 SELECT * FROM exchange_rates e
                 JOIN currencies c ON c.id = e.base_currency_id
@@ -51,14 +52,14 @@ public class ExchangeRateDao implements IExchangeRateDao {
             if (resultSet.next()) {
                 exchangeRate = daoUtil.getExchangeRate(resultSet);
             }
-            return exchangeRate;
+            return Optional.ofNullable(exchangeRate);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public ExchangeRate read(String baseCurrencyCode, String targetCurrencyCode) {
+    public Optional<ExchangeRate> read(String baseCurrencyCode, String targetCurrencyCode) {
         final String query = """
                 SELECT * FROM exchange_rates e
                 JOIN currencies c ON c.id = e.base_currency_id
@@ -76,7 +77,7 @@ public class ExchangeRateDao implements IExchangeRateDao {
             if (resultSet.next()) {
                 exchangeRate = daoUtil.getExchangeRate(resultSet);
             }
-            return exchangeRate;
+            return Optional.ofNullable(exchangeRate);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

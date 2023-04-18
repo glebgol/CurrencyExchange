@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -35,10 +36,10 @@ class ExchangeRateServiceTest {
 
     @Test
     void getExchangeRateByCodes() {
-        ExchangeRate expectedExchangeRate = getExchangeRate();
+        Optional<ExchangeRate> expectedExchangeRate = Optional.of(getExchangeRate());
         when(exchangeRateDao.read("USD", "RUB")).thenReturn(expectedExchangeRate);
 
-        ExchangeRate actualExchangeRate = service.getExchangeRateByCodes("USDRUB").get();
+        Optional<ExchangeRate> actualExchangeRate = service.getExchangeRateByCodes("USDRUB");
 
         assertEquals(expectedExchangeRate, actualExchangeRate);
     }
