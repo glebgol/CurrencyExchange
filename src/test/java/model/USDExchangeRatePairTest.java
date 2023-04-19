@@ -27,7 +27,7 @@ class USDExchangeRatePairTest {
 
     @Test
     void getRateFrom_USDtoRUBAndUSDtoEUR_To_RUBtoEUR() {
-        BigDecimal expectedRate = BigDecimal.valueOf(89.923076);
+        BigDecimal expectedRate = BigDecimal.valueOf(89.923077);
         BigDecimal firstRate = BigDecimal.valueOf(1 / 81.83);
         BigDecimal secondRate = BigDecimal.valueOf(1 / 0.91);
 

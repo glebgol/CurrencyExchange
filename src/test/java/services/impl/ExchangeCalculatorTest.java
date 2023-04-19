@@ -1,8 +1,10 @@
 package services.impl;
 
 import model.ExchangeRate;
+import model.USDExchangeRatePair;
 import org.junit.jupiter.api.Test;
 import services.impl.utils.ExchangeCalculator;
+import services.impl.factories.ExchangeRateFactory;
 
 import java.math.BigDecimal;
 
@@ -14,9 +16,8 @@ class ExchangeCalculatorTest {
     @Test
     void convertFromBaseToTarget() {
         BigDecimal amountToConvert = new BigDecimal("123.1");
-        BigDecimal rate = new BigDecimal("2.3");
-        ExchangeRate exchangeRate = new ExchangeRate(null, null, rate);
-        BigDecimal expectedConvertedAmount = new BigDecimal("283.13");
+        ExchangeRate exchangeRate = ExchangeRateFactory.create("USD", "BYN");
+        BigDecimal expectedConvertedAmount = new BigDecimal("311.443");
 
         BigDecimal actualConvertedAmount = exchangeCalculator.convertFromBaseToTarget(amountToConvert, exchangeRate);
 
@@ -26,16 +27,25 @@ class ExchangeCalculatorTest {
     @Test
     void convertFromTargetToBase() {
         BigDecimal amountToConvert = new BigDecimal(100);
-        BigDecimal rate = new BigDecimal("2.3");
-        ExchangeRate exchangeRate = new ExchangeRate(null, null, rate);
-        BigDecimal expectedConvertedAmount = new BigDecimal("43.478260");
+        ExchangeRate exchangeRate = ExchangeRateFactory.create("USD", "BYN");
+        BigDecimal expectedConvertedAmount = new BigDecimal("39.525700");
 
-        BigDecimal actualConvertedAmount = exchangeCalculator.convertFromBaseToTarget(amountToConvert, exchangeRate);
+        BigDecimal actualConvertedAmount = exchangeCalculator.convertFromTargetToBase(amountToConvert, exchangeRate);
 
         assertEquals(expectedConvertedAmount, actualConvertedAmount);
     }
 
     @Test
     void convertFromUSDPair() {
+        BigDecimal amountToConvert = new BigDecimal(100);
+        USDExchangeRatePair usdExchangeRatePair = new USDExchangeRatePair(
+                ExchangeRateFactory.create("USD", "BYN"),
+                ExchangeRateFactory.create("USD", "EUR")
+        );
+        BigDecimal expectedConvertedAmount = new BigDecimal("35.968400");
+
+        BigDecimal actualConvertedAmount = exchangeCalculator.convertFromUSDPair(amountToConvert, usdExchangeRatePair);
+
+        assertEquals(expectedConvertedAmount, actualConvertedAmount);
     }
 }
