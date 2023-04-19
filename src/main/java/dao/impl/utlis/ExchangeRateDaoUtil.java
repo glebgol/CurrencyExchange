@@ -21,23 +21,12 @@ public class ExchangeRateDaoUtil {
         String targetCurrencyFullName = resultSet.getString(11);
         String targetCurrencySign = resultSet.getString(12);
 
-        Currency baseCurrency = new Currency();
-        baseCurrency.setCode(baseCurrencyCode);
-        baseCurrency.setId(baseCurrencyId);
-        baseCurrency.setFullName(baseCurrencyFullName);
-        baseCurrency.setSign(baseCurrencySign);
+        Currency baseCurrency = new Currency(baseCurrencyId, baseCurrencyCode,
+                baseCurrencyFullName, baseCurrencySign);
 
-        Currency targetCurrency = new Currency();
-        targetCurrency.setCode(targetCurrencyCode);
-        targetCurrency.setId(targetCurrencyId);
-        targetCurrency.setFullName(targetCurrencyFullName);
-        targetCurrency.setSign(targetCurrencySign);
+        Currency targetCurrency = new Currency(targetCurrencyId, targetCurrencyCode,
+                targetCurrencyFullName, targetCurrencySign);
 
-        ExchangeRate exchangeRate = new ExchangeRate();
-        exchangeRate.setId(id);
-        exchangeRate.setRate(rate);
-        exchangeRate.setBaseCurrency(baseCurrency);
-        exchangeRate.setTargetCurrency(targetCurrency);
-        return exchangeRate;
+        return new ExchangeRate(id, baseCurrency, targetCurrency, rate);
     }
 }

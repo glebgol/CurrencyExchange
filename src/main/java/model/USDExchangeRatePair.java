@@ -1,5 +1,6 @@
 package model;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,7 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class USDExchangeRatePair {
     private ExchangeRate firstExchangeRate;
     private ExchangeRate secondExchangeRate;

@@ -12,11 +12,6 @@ public class CurrencyDaoUtil {
         String fullName = resultSet.getString("full_name");
         String sign = resultSet.getString("sign");
 
-        Currency currency = new Currency();
-        currency.setFullName(fullName);
-        currency.setId(id);
-        currency.setSign(sign);
-        currency.setCode(code);
-        return currency;
+        return new Currency(id, code, fullName, sign);
     }
 }
