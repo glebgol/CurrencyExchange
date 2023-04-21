@@ -68,4 +68,9 @@ public class ExchangeRateService implements IExchangeRateService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public void addExchangeRate(ExchangeRate exchangeRate) {
+        exchangeRateDao.create(exchangeRate);
+    }
 }

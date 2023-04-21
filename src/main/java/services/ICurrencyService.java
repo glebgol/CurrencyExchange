@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ICurrencyService {
     List<Currency> getAllCurrencies();
     Optional<Currency> getCurrencyByCode(String code);
+    void addCurrency(Currency currency);
 }

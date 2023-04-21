@@ -22,4 +22,9 @@ public class CurrencyService implements ICurrencyService {
     public Optional<Currency> getCurrencyByCode(String code) {
         return currencyDao.read(code);
     }
+
+    @Override
+    public void addCurrency(Currency currency) {
+        currencyDao.create(currency);
+    }
 }

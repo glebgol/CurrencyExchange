@@ -11,4 +11,5 @@ public interface IExchangeRateService {
     List<ExchangeRate> getAllExchangeRates();
     Optional<ExchangeRate> getExchangeRateByCodes(String codes);
     Optional<ExchangeRateResponse> getExchangeRate(ExchangeRateRequest exchangeRateRequest);
+    void addExchangeRate(ExchangeRate exchangeRate);
 }
