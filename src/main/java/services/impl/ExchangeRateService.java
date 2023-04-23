@@ -51,8 +51,8 @@ public class ExchangeRateService implements IExchangeRateService {
 
         exchangeRateOptional = exchangeRateDao.read(targetCurrencyCode, baseCurrencyCode);
         if (exchangeRateOptional.isPresent()) {
-            ExchangeRate exchangeRate = exchangeRateOptional.get();
-            BigDecimal convertedAmount = exchangeCalculator.convertFromTargetToBase(amountToConvert, exchangeRate);
+            ExchangeRate exchangeRate = exchangeRateOptional.get().getReverseExchangeRate();
+            BigDecimal convertedAmount = exchangeCalculator.convertFromBaseToTarget(amountToConvert, exchangeRate);
 
             return Optional.of(new ExchangeRateResponse(exchangeRate, amountToConvert, convertedAmount));
         }
