@@ -4,6 +4,7 @@ import dao.IExchangeRateDao;
 import dto.ExchangeRateRequest;
 import dto.ExchangeRateResponse;
 import model.ExchangeRate;
+import model.USDExchangeRatePair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -52,14 +53,17 @@ class ExchangeRateServiceTest {
 
     @Test
     void getExistingExchangeRate() {
+        BigDecimal amount = new BigDecimal(100);
+        BigDecimal convertedAmount = new BigDecimal("253.00");
+
         ExchangeRateRequest exchangeRateRequest =
-                new ExchangeRateRequest("USD", "BYN", new BigDecimal(100));
+                new ExchangeRateRequest("USD", "BYN", amount);
         when(exchangeRateDao.read("USD", "BYN"))
                 .thenReturn(Optional.of(ExchangeRateFactory.create("USD", "BYN")));
         ExchangeRateResponse expectedResponse = new ExchangeRateResponse(
                 ExchangeRateFactory.create("USD", "BYN"),
-                new BigDecimal(100),
-                new BigDecimal("253.00")
+                amount,
+                convertedAmount
         );
 
         ExchangeRateResponse actualResponse = service.getExchangeRate(exchangeRateRequest).get();
@@ -69,19 +73,52 @@ class ExchangeRateServiceTest {
 
     @Test
     void getReverseExchangeRate() {
+        BigDecimal amount = new BigDecimal(100);
+        BigDecimal convertedAmount = new BigDecimal("39.525700");
+
         ExchangeRateRequest exchangeRateRequest =
-                new ExchangeRateRequest("BYN", "USD", new BigDecimal(100));
+                new ExchangeRateRequest("BYN", "USD", amount);
+
+        ExchangeRateResponse expectedResponse = new ExchangeRateResponse(
+                ExchangeRateFactory.create("BYN", "USD"),
+                amount,
+                convertedAmount
+        );
 
         when(exchangeRateDao.read("BYN", "USD"))
                 .thenReturn(Optional.empty());
         when(exchangeRateDao.read("USD", "BYN"))
                 .thenReturn(Optional.of(ExchangeRateFactory.create("USD", "BYN")));
 
+        ExchangeRateResponse actualResponse = service.getExchangeRate(exchangeRateRequest).get();
+
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void getExchangeRateFromUSDPair() {
+        BigDecimal amount = new BigDecimal(100);
+        BigDecimal convertedAmount = new BigDecimal("3219.367600");
+
+        ExchangeRateRequest exchangeRateRequest =
+                new ExchangeRateRequest("BYN", "RUB", amount);
+
         ExchangeRateResponse expectedResponse = new ExchangeRateResponse(
-                ExchangeRateFactory.create("BYN", "USD"),
-                new BigDecimal(100),
-                new BigDecimal("40")
+                ExchangeRateFactory.create("BYN", "RUB"),
+                amount,
+                convertedAmount
         );
+
+        when(exchangeRateDao.read("BYN", "RUB"))
+                .thenReturn(Optional.empty());
+        when(exchangeRateDao.read("RUB", "BYN"))
+                .thenReturn(Optional.empty());
+        when(exchangeRateDao.readCodesWithUSDBase("BYN", "RUB"))
+                .thenReturn(Optional.of(new USDExchangeRatePair(
+                        ExchangeRateFactory.create("USD", "BYN"),
+                        ExchangeRateFactory.create("USD", "RUB")
+                )));
+
         ExchangeRateResponse actualResponse = service.getExchangeRate(exchangeRateRequest).get();
 
         assertEquals(expectedResponse, actualResponse);

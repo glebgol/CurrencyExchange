@@ -60,13 +60,13 @@ public class ExchangeRateFactory {
                     return new ExchangeRate(
                             CurrencyFactory.create("BYN"),
                             CurrencyFactory.create("USD"),
-                            new BigDecimal("0.395256917")
+                            new BigDecimal("0.395257")
                     );
                 } else if (to.equals("RUB")) {
                     return new ExchangeRate(
                             CurrencyFactory.create("BYN"),
                             CurrencyFactory.create("RUB"),
-                            new BigDecimal("32.29")
+                            new BigDecimal("32.193676")
                     );
                 }
                 break;
