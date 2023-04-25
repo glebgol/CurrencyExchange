@@ -10,7 +10,11 @@ import services.ICurrencyService;
 import services.IExchangeRateService;
 import services.impl.CurrencyService;
 import services.impl.ExchangeRateService;
+import utils.ICurrencyRequestParser;
+import utils.ICurrencyRequestValidator;
 import utils.IJsonMapper;
+import utils.impl.CurrencyRequestParser;
+import utils.impl.CurrencyRequestValidator;
 import utils.impl.JsonMapper;
 
 import javax.servlet.*;
@@ -39,10 +43,14 @@ public class ContextListener implements ServletContextListener {
         IExchangeRateService exchangeRateService = new ExchangeRateService(exchangeRateDao);
 
         IJsonMapper jsonMapper = new JsonMapper();
+        ICurrencyRequestParser currencyRequestParser = new CurrencyRequestParser();
+        ICurrencyRequestValidator currencyRequestValidator = new CurrencyRequestValidator();
 
         context.setAttribute("currencyService", currencyService);
         context.setAttribute("exchangeRateService", exchangeRateService);
         context.setAttribute("jsonMapper", jsonMapper);
+        context.setAttribute("currencyRequestParser", currencyRequestParser);
+        context.setAttribute("currencyRequestValidator", currencyRequestValidator);
     }
 
     @Override
