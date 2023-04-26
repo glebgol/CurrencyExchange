@@ -5,7 +5,7 @@ import services.ICurrencyService;
 import utils.IJsonMapper;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +22,10 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) {
-        mapper = (IJsonMapper) config.getServletContext().getAttribute("jsonMapper");
-        currencyService = (ICurrencyService) config.getServletContext().getAttribute("currencyService");
+        ServletContext servletContext = config.getServletContext();
+
+        mapper = (IJsonMapper) servletContext.getAttribute("jsonMapper");
+        currencyService = (ICurrencyService) servletContext.getAttribute("currencyService");
     }
 
     @Override

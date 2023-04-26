@@ -22,10 +22,12 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) {
-        mapper = (IJsonMapper) config.getServletContext().getAttribute("jsonMapper");
-        currencyService = (ICurrencyService) config.getServletContext().getAttribute("currencyService");
-        currencyRequestValidator = (ICurrencyRequestValidator) config.getServletContext().getAttribute("currencyRequestValidator");
-        currencyRequestParser = (ICurrencyRequestParser) config.getServletContext().getAttribute("currencyRequestParser");
+        ServletContext servletContext = config.getServletContext();
+
+        mapper = (IJsonMapper) servletContext.getAttribute("jsonMapper");
+        currencyService = (ICurrencyService) servletContext.getAttribute("currencyService");
+        currencyRequestValidator = (ICurrencyRequestValidator) servletContext.getAttribute("currencyRequestValidator");
+        currencyRequestParser = (ICurrencyRequestParser) servletContext.getAttribute("currencyRequestParser");
     }
 
     @Override
